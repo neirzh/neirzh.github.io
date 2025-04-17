@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>Abrar's Dumpster</title>
+</head>
+<body>
+    <header>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav id="nav-menu" class="nav-menu">
+            <ul>
+                <li><a href="index.html" class="active">Thoughts</a></li>
+                <li><a href="interests.html">Interests</a></li>
+                <li><a href="projects.html">Projects</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="middle">
+            <h1>Thoughts</h1>
+            <div class="post" onclick="togglePost(this)">
+                <h2>Thinking About Cultural Reshaping</h2>
+                <div class="post-content">
+                    <p>It might be possible to reshape the culture of the world as a whole and impact the mindsets of people by doing something that solely focuses on shaping the cultures. idk what im talking about by the way.</p>
+                    <p>_______<br>February 14 2024</p>
+                    <span class="collapse-arrow" onclick="collapsePost(this)">↑</span>
+                </div>
+            </div>
+            <div class="post" onclick="togglePost(this)">
+                <h2>Vox is Annoying</h2>
+                <div class="post-content">
+                    <p>The storytelling, shots, editing + animation in many of the modern day journalism videos from channels like Vox and some other big YouTubers (like Johnny Harris) feels really annoying. Trying to see why. They are indeed flashy, gimmicky, and distracting. I think they don't get to the point straight. Giving the context on the subject is helpful, but there are better ways of presenting that information directly without lengthening the video. Nevertheless, some do love those videos.</p>
+                    <p>_______<br>February 13 2024</p>
+                    <span class="collapse-arrow" onclick="collapsePost(this)">↑</span>
+                </div>
+            </div>
+            <div class="post" onclick="togglePost(this)">
+                <h2>My Ultimate Plan</h2>
+                <div class="post-content">
+                    <p>• Make breakthroughs<br>• Make enough money for health safety.<br>• Using it, push death away temporarily (bio, cyborg, etc.).<br>• Before permanent death, advance 'universe' to when everything happens, thus nothing happens. Death of everything.</p>
+                    <p>Embracing death to cope with death.</p>
+                    <p>_______<br>February 13 2024</p>
+                    <span class="collapse-arrow" onclick="collapsePost(this)">↑</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function togglePost(element) {
+            const content = element.querySelector('.post-content');
+            if (!content.style.display || content.style.display === 'none') {
+                content.style.display = 'block';
+                element.classList.add('expanded');
+            } else {
+                content.style.display = 'none';
+                element.classList.remove('expanded');
+            }
+        }
+
+        function collapsePost(arrow) {
+            const post = arrow.closest('.post');
+            const content = post.querySelector('.post-content');
+            content.style.display = 'none';
+            post.classList.remove('expanded');
+            event.stopPropagation();
+        }
+
+        document.getElementById('hamburger').addEventListener('click', () => {
+            const nav = document.getElementById('nav-menu');
+            const hamburger = document.getElementById('hamburger');
+            nav.classList.toggle('open');
+            hamburger.classList.toggle('open');
+        });
+    </script>
+</body>
+</html>
