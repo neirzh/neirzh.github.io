@@ -1,392 +1,575 @@
-<!--Change "Interests" into "Menterests"
-    look into bottom padding issue in expanded posts
-    remove the close button
-    -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neirzhei Notes</title>
-    <style>
-        :root {
-            --dark-bg: #000000;
-            --darker-bg: #272727;
-            --text-color: #f5f5f5;
-            --highlight: #f5f5f5;
-            --border-color: #272727;
-            --corner-radius: 10px;
-            --nav-width: 200px;
-            --content-width: 800px;
-        }
-        
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: system-ui;
-            background-color: var(--dark-bg);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-        
-        /* Mobile Navigation (Top) */
-        nav.mobile-nav {
-            background-color: var(--darker-bg);
-            position: sticky;
-            top: 0;
-            width: 100%;
-            z-index: 100;
-            display: flex;
-            justify-content: space-around;
-            padding: 0;
-        }
-        
-        nav.mobile-nav button {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-family: system-ui;
-            
-            font-weight: 500;
-            padding: 1rem 0;
-            flex-grow: 1;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        nav.mobile-nav button.active {
-            color: var(--highlight);
-        }
-        
-        nav.mobile-nav button.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background-color: var(--highlight);
-        }
-        
-        /* Desktop Navigation (Side) */
-        nav.desktop-nav {
-            display: none;
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100vh;
-            width: var(--nav-width);
-            padding: 2rem 1rem;
-            flex-direction: column;
-            gap: 1rem;
-            z-index: 100;
-            box-sizing: border-box;
-        }
-        
-        nav.desktop-nav button {
-            background-color: var(--darker-bg);
-            border: 2px solid var(--border-color);
-            border-radius: var(--corner-radius);
-            color: var(--text-color);
-            font-family: system-ui;
-            
-            font-weight: 500;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-        
-        nav.desktop-nav button.active {
-            border-color: var(--highlight);
-            color: var(--highlight);
-        }
-        
-        /* Content Container */
-        .container-wrapper {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            position: relative;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: var(--content-width);
-            padding: 1rem;
-            box-sizing: border-box;
-            margin: 0 auto; /* Center horizontally */
-        }
-        
-        .post {
-            background-color: var(--darker-bg);
-            border-radius: var(--corner-radius);
-            margin-bottom: 1rem;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .post-content {
-            margin: 0;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 4;
-            -webkit-box-orient: vertical;
-        }
-        
-        .post.expanded {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            border-radius: 0;
-            z-index: 200;
-            overflow-y: auto;
-            padding-top: 4rem;
-        }
-        
-        .post.expanded .post-content {
-            -webkit-line-clamp: unset;
-            max-width: var(--content-width);
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
-        .close-button {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            background-color: var(--border-color);
-            color: var(--text-color);
-            border: none;
-            border-radius: 50%;
-            width: 2.5rem;
-            height: 2.5rem;
-            font-size: 1.2rem;
-            cursor: pointer;
-            z-index: 300;
-        }
-        
-        .post.expanded .close-button {
-            display: block;
-        }
-        
-        /* Page Content */
-        .page {
-            display: none;
-        }
-        
-        .page.active {
-            display: block;
-        }
-        
-        /* Responsive Layout */
-        @media (min-width: 1200px) {
-            /* Show side nav at wide screens */
-            nav.mobile-nav {
-                display: none;
-            }
-            
-            nav.desktop-nav {
-                display: flex;
-            }
-            
-            /* No need to offset the container - it stays centered */
-        }
-        
-        @media (max-width: 1199px) {
-            /* Show top nav at narrower screens */
-            nav.mobile-nav {
-                display: flex;
-            }
-            
-            nav.desktop-nav {
-                display: none;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neirzh Notes</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'alegreya sans',system-ui;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background-color: #000;
+      color: #fff;
+    }
+
+    /* Layout */
+    .container {
+      display: flex;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Left menu */
+    .menu {
+      width: 200px;
+      padding: 20px;
+      background-color: #000;
+      border-right: 1px solid #333;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 60px;
+      margin-bottom: 15px;
+      background-color: #232323;
+      border: 1px solid #232323;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .menu-item.active {
+      background-color: #000;
+      border-color: #e4a853;
+      color: #e4a853;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 60px;
+      margin-bottom: 15px;
+      background-color: #232323;
+      border: 1px solid #232323;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* Main content */
+    .content {
+      flex: 1;
+      display: flex;
+      max-width: 800px;
+      background-color: #000;
+      border-right: 1px solid #333;
+    }
+
+    /* Feed */
+    .feed-container {
+      flex: 1;
+      border-right: 1px solid #333;
+    }
+
+    .feed {
+      list-style: none;
+      border-top: 1px solid #333;
+    }
+
+    .post {
+      padding: 15px;
+      border-bottom: 1px solid #333;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .post-content {
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    .post-tags {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #e4a853;
+    }
+
+    .post-tag {
+      margin-right: 5px;
+    }
+
+    .truncated .post-content {
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      max-height: 6em;
+    }
+
+    .truncated .post-content::after {
+      content: "...";
+    }
+
+    .expanded {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      overflow-y: auto;
+    }
+
+    .expanded .post-content{
+      max-width: 800px;
+      width: 100%;
+      padding: 20px;
+      margin: 0 auto;
+    }
+
+    .expanded .post-tags {
+    display: none;
+    }
+
+    /* Tags */
+    .tags-section {
+      width: 200px;
+      padding: 20px;
+      background-color: #000;
+    }
+
+    .tag-list {
+      list-style: none;
+    }
+
+    .tag-item {
+      margin-bottom: 10px;
+      padding: 8px;
+      background-color: #232323;
+      border-radius: 15px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .tag-item.active {
+      background-color: #000;
+      color: #e4a853;
+    }
+
+    /* Mobile styles */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+      background-color: #000;
+      z-index: 101;
+      transition: transform 0.3s;
+    }
+
+    .mobile-nav-content {
+      display: flex;
+      height: 100%;
+    }
+
+    .mobile-nav-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .mobile-menu-panel, .mobile-tags-panel {
+      display: none;
+      position: fixed;
+      top: 50px;
+      left: 0;
+      right: 0;
+      background-color: #000;
+      z-index: 100;
+      padding: 20px;
+      border-bottom: 1px solid #333;
+    }
+
+    /* Hide the content sections by default */
+    .posts-content {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding-top: 50px;
+      }
+      
+      .mobile-nav {
+        display: block;
+      }
+
+      .body-with-expanded-post .mobile-nav {
+        display: none;
+      }
+
+      .container {
+        flex-direction: column;
+      }
+
+      .menu, .tags-section {
+        display: none;
+        width: 100%;
+      }
+
+      .content {
+        width: 100%;
+        border-right: none;
+        font-size: 15px;
+      }
+
+      .feed-container {
+        border-right: none;
+      }
+
+      .mobile-nav.hidden {
+        transform: translateY(-100%);
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Mobile Navigation (Top) -->
-    <nav class="mobile-nav" id="mobileNav">
-        <button class="nav-btn active" data-page="thoughts">Thoughts</button>
-        <button class="nav-btn" data-page="projects">Projects</button>
-        <button class="nav-btn" data-page="interests">Interests</button>
-    </nav>
-    
-    <!-- Desktop Navigation (Side) -->
-    <nav class="desktop-nav" id="desktopNav">
-        <button class="nav-btn active" data-page="thoughts">Thoughts</button>
-        <button class="nav-btn" data-page="projects">Projects</button>
-        <button class="nav-btn" data-page="interests">Interests</button>
-    </nav>
-    
-    <div class="container-wrapper">
-        <div class="container">
-
-<!--Thoughts-->  
-            <div id="thoughts" class="page active">
-
-                <div class="post" onclick="expandPost(this)">
-                    <p class="post-content">
-                    High time humans started bioengineering more powerful horses instead of building motorcycles.</p>
-                <button class="close-button" onclick="closePost(event, this)">✕</button>
-            </div>
-
-                <div class="post" onclick="expandPost(this)">
-                    <p class="post-content">
-                    Art is barcode, perception is decoder.</p>
-                <button class="close-button" onclick="closePost(event, this)">✕</button>
-            </div>
-
-                <div class="post" onclick="expandPost(this)">
-                        <p class="post-content">
-                        In the marriage of form and function, few human creations speak more intimately to our nature than weapons. Beyond mere tools of conflict, they stand as extensions of physical manifestations of our instincts, intentions, and identities. “The sword is more than a simple tool,” that was the philosophy of the greatest master swordsmiths, the likes of Masamune. When metal meets intent, something more than craftsmanship emerges.<br><br>
-
-                        Consider how a weapon feels in hand– the balance, the weight, the subtle curve that guides movement. These aren’t arbitrary design choices but conversations between creator and wielder. Weapons have personality, tendency and voice, because our response to them operates on a primal level. The intention behind a weapon triggers something ancient within us.<br><br>
-                        
-                        As Miyamoto Musashi observed, “The way of the warrior is to master the virtue of his weapons”, shaolin martial philosophy also often speaks of "the unity of man and weapon” (ren qi he yi), a concept where the practitioner’s movements and the weapon’s purpose become indistinguishable. This unity represents the highest achievement– where tool vanishes and only intention remains. In the same manner– a custom weapon, crafted specifically for its wielder, transcends utility to become a profound expression of himself.<br><br>
-                        
-                        Thus when we regard a weapon as art, we acknowledge this deep-seated connection between our primal instincts and our highest creative aspirations.<br><br><sub>February 23 2025</sub>
-                        <br><br><br><br></p>
-                    <button class="close-button" onclick="closePost(event, this)">✕</button>
-                </div>
-
-                <div class="post" onclick="expandPost(this)">
-                    <p class="post-content">
-                        “If we are bound by fate I’m sure we will meet again” — if two people have similar goals they are working towards / similar way of living / similar ‘sub-world’ they live in, then their paths will eventually cross as they walk on their own paths. If not then those two never had any need to be together in the first place. The system never asked for them to be together in order to complete the cycles that a system goes through. A sub-world in the world is a finite network afterall. What I learnt is that in sentences like the one mentioned above, the word 'fate’ is not used in its usual/literal meaning.<br><br>
-
-                        Found the sentence in Legend of the Northern Blade Volume 1 Chapter 35 where the 'Crazed Scholar’ was saying that to Jin.</p>
-                    <button class="close-button" onclick="closePost(event, this)">✕</button>
-                </div>
-                
-            </div>
-            
-
-<!--Projects-->
-            <div id="projects" class="page">
-
-                <p style="color:#272727; font-size: 50px;">nothing yet...</p>
-                
-            </div>
-            
-
-<!--Interests-->
-            <div id="interests" class="page">
-                
-                <div class="post" onclick="expandPost(this)">
-                    <p class="post-content">
-                        Favorite Ironman armors:<br>
-                        1. Mark XLII<br>
-                        2. Rescue Armor: Reason is that Tony made that specially for the safety of Potts.</p>
-                    <button class="close-button" onclick="closePost(event, this)">✕</button>
-                </div>
-
-                <div class="post" onclick="expandPost(this)">
-                    <p class="post-content">
-                        Tat Tvam Asi (You are That) is really close to my belief</p>
-                    <button class="close-button" onclick="closePost(event, this)">✕</button>
-                </div>
-
-            </div>
-
-
-
-        </div>
+  <div class="mobile-nav" id="mobile-nav">
+    <div class="mobile-nav-content">
+      <div class="mobile-nav-item" id="mobile-menu-button">☰</div>
+      <div class="mobile-nav-item" id="mobile-tags-button">#</div>
     </div>
+  </div>
+  
+  <div class="mobile-menu-panel" id="mobile-menu-panel">
+    <div class="menu-item active" data-page="thoughts">Thoughts</div>
+    <div class="menu-item" data-page="projects">Projects</div>
+    <div class="menu-item" data-page="me">Me</div>
+    <a href="https://twitter.com" target="_blank" class="social-link">X (Twitter)</a>
+    <a href="https://youtube.com" target="_blank" class="social-link">YouTube</a>
+    <a href="https://tumblr.com" target="_blank" class="social-link">Tumblr</a>
+  </div>
+  
+  <div class="mobile-tags-panel" id="mobile-tags-panel">
+    <ul class="tag-list" id="mobile-tag-list"></ul>
+  </div>
+  
+  <div class="container">
+    <div class="menu">
+      <div class="menu-item active" data-page="thoughts">Thoughts</div>
+      <div class="menu-item" data-page="projects">Projects</div>
+      <div class="menu-item" data-page="me">Me</div>
+      <a href="https://x.com/neirzhei" target="_blank" class="social-link" >X</a>
+      <a href="https://www.youtube.com/@neirzhei" target="_blank" class="social-link">YouTube</a>
+      <a href="https://neir2hei.tumblr.com/" target="_blank" class="social-link">Tumblr</a>
+    </div>
+    
+    <div class="content">
+      <div class="feed-container">
+        <ul class="feed" id="feed"></ul>
+      </div>
+    </div>
+    
+    <div class="tags-section">
+      <ul class="tag-list" id="tag-list"></ul>
+    </div>
+  </div>
 
-    <script>
-        // Navigation functionality
-        const mobileNavButtons = document.querySelectorAll('.mobile-nav .nav-btn');
-        const desktopNavButtons = document.querySelectorAll('.desktop-nav .nav-btn');
-        const pages = document.querySelectorAll('.page');
+  <!-- Content sections - hidden by default and loaded via JavaScript -->
+  <div id="posts-content" class="posts-content">
+    <!-- Thoughts posts -->
+    <div class="page-content" id="thoughts-content">
+      <div class="post" data-tags="art">
+        <div class="post-content">In the marriage of form and function, few human creations speak more intimately to our nature than weapons. Beyond mere tools of conflict, they stand as extensions of physical manifestations of our instincts, intentions, and identities. “The sword is more than a simple tool,” that was the philosophy of the greatest master swordsmiths, the likes of Masamune. When metal meets intent, something more than craftsmanship emerges.<br><br>
+
+          Consider how a weapon feels in hand– the balance, the weight, the subtle curve that guides movement. These aren’t arbitrary design choices but conversations between creator and wielder. Weapons have personality, tendency and voice, because our response to them operates on a primal level. The intention behind a weapon triggers something ancient within us.<br><br>
+          
+          As Miyamoto Musashi observed, “The way of the warrior is to master the virtue of his weapons”, shaolin martial philosophy also often speaks of "the unity of man and weapon” (ren qi he yi), a concept where the practitioner’s movements and the weapon’s purpose become indistinguishable. This unity represents the highest achievement– where tool vanishes and only intention remains. In the same manner– a custom weapon, crafted specifically for its wielder, transcends utility to become a profound expression of himself.<br><br>
+          
+          Thus when we regard a weapon as art, we acknowledge this deep-seated connection between our primal instincts and our highest creative aspirations.</div>
+      </div>
+    </div>
+    
+    <!-- me posts -->
+    <div class="page-content" id="me-content">
+      <div class="post" data-tags="movie,design">
+        <div class="post-content">Favorite Ironman suits:
+          <ul>
+            <li>Mark-XLII</li>
+            <li>Mark-XLIX (Rescue Armor)</li>
+         </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Projects posts -->
+    <div class="page-content" id="projects-content">
+      <div class="post" data-tags="null">
+        <div class="post-content">N O T H I N G  Y E T</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let activePage = 'thoughts';
+    let activeTag = null;
+    let lastScrollPosition = 0;
+
+    // Initialize the application
+    function init() {
+      updateFeed();
+      updateTagList();
+      setupEventListeners();
+    }
+
+    // Update the feed based on active page and tag
+    function updateFeed() {
+      const feed = document.getElementById('feed');
+      feed.innerHTML = '';
+      
+      // Get posts from the hidden HTML content
+      const pageContent = document.getElementById(`${activePage}-content`);
+      if (!pageContent) return;
+      
+      const postElements = pageContent.querySelectorAll('.post');
+      
+      postElements.forEach(postElement => {
+        const tags = postElement.getAttribute('data-tags').split(',');
         
-        function handleNavClick(button) {
-            // Update active button in both navs
-            const pageId = button.getAttribute('data-page');
-            
-            mobileNavButtons.forEach(btn => {
-                if (btn.getAttribute('data-page') === pageId) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            
-            desktopNavButtons.forEach(btn => {
-                if (btn.getAttribute('data-page') === pageId) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            
-            // Show corresponding page
-            pages.forEach(page => {
-                if (page.id === pageId) {
-                    page.classList.add('active');
-                } else {
-                    page.classList.remove('active');
-                }
-            });
-        }
+        // Skip if filtering by tag and post doesn't have the tag
+        if (activeTag && !tags.includes(activeTag)) return;
         
-        mobileNavButtons.forEach(button => {
-            button.addEventListener('click', () => handleNavClick(button));
+        const li = document.createElement('li');
+        li.className = 'post truncated';
+        
+        const content = document.createElement('div');
+        content.className = 'post-content';
+        content.textContent = postElement.querySelector('.post-content').textContent;
+        li.appendChild(content);
+        
+        const tagsDiv = document.createElement('div');
+        tagsDiv.className = 'post-tags';
+        tags.forEach(tag => {
+          if (tag === 'null') return; // Skip "null" tags
+          const tagSpan = document.createElement('span');
+          tagSpan.className = 'post-tag';
+          tagSpan.textContent = `#${tag}`;
+          tagsDiv.appendChild(tagSpan);
         });
+        li.appendChild(tagsDiv);
         
-        desktopNavButtons.forEach(button => {
-            button.addEventListener('click', () => handleNavClick(button));
+        li.addEventListener('click', () => togglePostExpansion(li));
+        feed.appendChild(li);
+      });
+    }
+
+    // Update the tag list based on active page
+    function updateTagList() {
+      const tagList = document.getElementById('tag-list');
+      const mobileTagList = document.getElementById('mobile-tag-list');
+      tagList.innerHTML = '';
+      mobileTagList.innerHTML = '';
+      
+      const tags = getAllTags();
+      
+      tags.forEach(tag => {
+        if (tag === 'null') return; // Skip "null" tags
+        
+        // Desktop tag
+        const li = document.createElement('li');
+        li.className = `tag-item ${tag === activeTag ? 'active' : ''}`;
+        li.textContent = `#${tag}`;
+        li.addEventListener('click', () => {
+          toggleTag(tag);
         });
+        tagList.appendChild(li);
         
-        // Post expansion functionality
-        function expandPost(post) {
-            post.classList.toggle('expanded');
-            if (post.classList.contains('expanded')) {
-                document.body.style.overflow = 'hidden';
-            }
+        // Mobile tag
+        const mobileLi = document.createElement('li');
+        mobileLi.className = `tag-item ${tag === activeTag ? 'active' : ''}`;
+        mobileLi.textContent = `#${tag}`;
+        mobileLi.addEventListener('click', () => {
+          toggleTag(tag);
+          closeMobilePanels();
+        });
+        mobileTagList.appendChild(mobileLi);
+      });
+    }
+
+    // Toggle tag selection
+    function toggleTag(tag) {
+      if (activeTag === tag) {
+        activeTag = null;
+        document.querySelectorAll('.tag-item').forEach(el => el.classList.remove('active'));
+      } else {
+        activeTag = tag;
+        document.querySelectorAll('.tag-item').forEach(el => {
+          if (el.textContent === `#${tag}`) {
+            el.classList.add('active');
+          } else {
+            el.classList.remove('active');
+          }
+        });
+      }
+      updateFeed();
+    }
+
+    // Get all unique tags for the active page
+    function getAllTags() {
+      const tagSet = new Set();
+      const pageContent = document.getElementById(`${activePage}-content`);
+      if (!pageContent) return [];
+      
+      const postElements = pageContent.querySelectorAll('.post');
+      postElements.forEach(post => {
+        const tags = post.getAttribute('data-tags').split(',');
+        tags.forEach(tag => tagSet.add(tag));
+      });
+      
+      return Array.from(tagSet);
+    }
+
+    // Toggle post expansion
+    function togglePostExpansion(postElement) {
+      if (postElement.classList.contains('expanded')) {
+        postElement.classList.remove('expanded');
+        postElement.classList.add('truncated');
+        document.body.classList.remove('body-with-expanded-post');
+        if (window.innerWidth <= 768) {
+          document.getElementById('mobile-nav').style.display = 'block';
         }
-        
-        function closePost(event, button) {
-            event.stopPropagation();
-            const post = button.parentElement;
-            post.classList.remove('expanded');
-            document.body.style.overflow = 'auto';
+      } else {
+        postElement.classList.add('expanded');
+        postElement.classList.remove('truncated');
+        document.body.classList.add('body-with-expanded-post');
+        if (window.innerWidth <= 768) {
+          document.getElementById('mobile-nav').style.display = 'none';
         }
-        
-        // Handle window resize for responsive layout
-        window.addEventListener('resize', handleResize);
-        
-        function handleResize() {
-            const width = window.innerWidth;
-            const contentWidth = 800; // Same as --content-width
-            const navWidth = 200; // Same as --nav-width
-            
-            // Calculate if there's enough space for side nav without overlapping content
-            const minWidthNeeded = contentWidth + navWidth + 200; // Extra 100px for padding/margin
-            
-            if (width < minWidthNeeded) {
-                // Switch to mobile layout if not enough space
-                document.querySelector('.mobile-nav').style.display = 'flex';
-                document.querySelector('.desktop-nav').style.display = 'none';
-            } else {
-                // Use desktop layout
-                document.querySelector('.mobile-nav').style.display = 'none';
-                document.querySelector('.desktop-nav').style.display = 'flex';
-            }
+        closeMobilePanels();
+      }
+    }
+
+    // Toggle mobile menu panel
+    function toggleMobileMenuPanel() {
+      const menuPanel = document.getElementById('mobile-menu-panel');
+      const tagsPanel = document.getElementById('mobile-tags-panel');
+      
+      if (menuPanel.style.display === 'block') {
+        menuPanel.style.display = 'none';
+      } else {
+        menuPanel.style.display = 'block';
+        tagsPanel.style.display = 'none';
+      }
+    }
+
+    // Toggle mobile tags panel
+    function toggleMobileTagsPanel() {
+      const menuPanel = document.getElementById('mobile-menu-panel');
+      const tagsPanel = document.getElementById('mobile-tags-panel');
+      
+      if (tagsPanel.style.display === 'block') {
+        tagsPanel.style.display = 'none';
+      } else {
+        tagsPanel.style.display = 'block';
+        menuPanel.style.display = 'none';
+      }
+    }
+
+    // Close mobile panels
+    function closeMobilePanels() {
+      document.getElementById('mobile-menu-panel').style.display = 'none';
+      document.getElementById('mobile-tags-panel').style.display = 'none';
+    }
+
+    // Handle scroll for mobile nav bar
+    function handleScroll() {
+      const currentScrollPosition = window.pageYOffset;
+      const mobileNav = document.getElementById('mobile-nav');
+      
+      // Only apply to mobile screens
+      if (window.innerWidth > 768) {
+        return;
+      }
+      
+      // Don't show/hide nav when a post is expanded
+      if (document.body.classList.contains('body-with-expanded-post')) {
+        return;
+      }
+      
+      if (currentScrollPosition > lastScrollPosition && currentScrollPosition > 50) {
+        // Scrolling down
+        mobileNav.classList.add('hidden');
+      } else {
+        // Scrolling up
+        mobileNav.classList.remove('hidden');
+      }
+      
+      lastScrollPosition = currentScrollPosition;
+    }
+
+    // Set up event listeners
+    function setupEventListeners() {
+      // Menu item click events
+      document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', () => {
+          document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+          item.classList.add('active');
+          activePage = item.getAttribute('data-page');
+          activeTag = null;
+          updateFeed();
+          updateTagList();
+          closeMobilePanels();
+        });
+      });
+      
+      // Mobile menu button click event
+      document.getElementById('mobile-menu-button').addEventListener('click', toggleMobileMenuPanel);
+      
+      // Mobile tags button click event
+      document.getElementById('mobile-tags-button').addEventListener('click', toggleMobileTagsPanel);
+      
+      // Scroll event for mobile nav
+      window.addEventListener('scroll', handleScroll);
+      
+      // Resize event to handle mobile/desktop transitions
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          document.getElementById('mobile-menu-panel').style.display = 'none';
+          document.getElementById('mobile-tags-panel').style.display = 'none';
         }
-        
-        // Initial call to set correct layout
-        handleResize();
-    </script>
+      });
+    }
+
+    // Initialize the app when the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
 </body>
 </html>
