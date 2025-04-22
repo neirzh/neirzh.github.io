@@ -1,2 +1,2 @@
 ## Personal blog
-### Although it's a kinda unfitting to directly update the html everytime I want to add a new post, I came to like this method over other mess.
+### I've come to prefer the simplicity of direct HTML editing whenever adding a new post, even if it's not the most efficient approach.
